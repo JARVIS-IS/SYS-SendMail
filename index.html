@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Sender Info</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <div style="display: flex; justify-content: space-between;">
+            <h2>Envoyer un E-mail</h2>
+            <button id="sendButton" class="btn btn-primary">Envoyer</button>
+        </div>
+        <div class="form-group mt-3">
+            <label for="from">De :</label>
+            <input type="text" class="form-control" id="from" placeholder="Votre adresse e-mail">
+        </div>
+        <div class="form-group">
+            <label for="to">À :</label>
+            <input type="text" class="form-control" id="to" placeholder="Adresse e-mail du destinataire">
+        </div>
+        <div class="form-group">
+            <label for="subject">Sujet :</label>
+            <input type="text" class="form-control" id="subject" placeholder="Sujet de l'e-mail">
+        </div>
+        <div class="form-group">
+            <label for="text">Contenu :</label>
+            <textarea class="form-control" id="text" rows="4" placeholder="Contenu de l'e-mail"></textarea>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sendButton = document.getElementById('sendButton');
+            const numberElement = document.getElementById('number');
+
+            sendButton.addEventListener('click', () => {
+                const from = document.getElementById('from').value;
+                const to = document.getElementById('to').value;
+                const subject = document.getElementById('subject').value;
+                const text = document.getElementById('text').value;
+
+                fetch('http://localhost:3003', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user: 'votre_utilisateur',
+                        pass: 'votre_mot_de_passe',
+                        from,
+                        to,
+                        subject,
+                        text,
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                    })
+                    .catch(error => console.error('Erreur lors de l\'envoi de l\'e-mail:', error));
+            });
+        });
+    </script>
+
+</body>
+
+</html>

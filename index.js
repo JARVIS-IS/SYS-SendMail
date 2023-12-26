@@ -8,22 +8,22 @@ const port = 3003;
 app.use(express.json());
 app.use(cors());
 
-SYS_ManageData_Port = 3002;
+SYS_ManageData_Port = 3004;
 
-function sendEmail(content) {
+function sendEmail(content, email, text) {
 	const transporter = nodemailer.createTransport({
 		service: 'gmail',
 		auth: {
 			user: content.user,
-			pass: content.path,
+			pass: content.pass,
 		},
 	});
 
 	const mailOptions = {
 		from: content.from,
-		to: content.to,
+		to: email,
 		subject: content.subject,
-		text: content.text,
+		text: text,
 	};
 
 	transporter.sendMail(mailOptions, function (error, info) {
@@ -36,18 +36,19 @@ function sendEmail(content) {
 }
 
 async function getInfo(info) {
-	fetch(`http://localhost:${SYS_SendMail_Port}`, {
+	fetch(`http://192.168.0.79:${SYS_ManageData_Port}`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify({
 			token: info.token,
+			type: info.type,
 		}),
 	})
 		.then((response) => response.json())
 		.then((data) => {
-			sendEmail(data);
+			sendEmail(JSON.parse(data), info.email, info.text);
 		});
 }
 

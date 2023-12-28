@@ -36,7 +36,7 @@ function sendEmail(content, email, text) {
 }
 
 async function getInfo(info) {
-	fetch(`http://192.168.0.79:${SYS_ManageData_Port}`, {
+	fetch(`http://192.168.0.97:${SYS_ManageData_Port}`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',

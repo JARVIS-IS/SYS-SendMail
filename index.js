@@ -53,7 +53,11 @@ async function getInfo(info) {
 }
 
 app.post('', (req, res) => {
-	getInfo(req.body);
+	if (req.body.type == 'status') {
+		res.sendStatus(200);
+	} else {
+		getInfo(req.body);
+	}
 });
 
 app.listen(port, () => console.log(`The SYS-SendMail server runs on port ${port}`));

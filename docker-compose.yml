@@ -7,14 +7,8 @@ services:
         ports:
             - 3003:3003
         working_dir: /srv/app
-        networks:
-            - network_main
         volumes:
             - type: bind
               source: ./
               target: /srv/app
         tty: true
-
-networks:
-    network_main:
-        driver: bridge

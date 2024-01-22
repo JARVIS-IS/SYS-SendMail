@@ -1,6 +1,8 @@
 const nodemailer = require('nodemailer');
 const express = require('express');
 const cors = require('cors');
+const fs = require('fs');
+require('dotenv').config();
 
 const app = express();
 const port = 3003;
@@ -10,20 +12,22 @@ app.use(cors());
 
 SYS_ManageData_Port = 3004;
 
-function sendEmail(content, email, text) {
+function sendEmail(secret, email, htmlContent) {
 	const transporter = nodemailer.createTransport({
-		service: 'gmail',
+		host: 'mail.infomaniak.com',
+		port: 465,
+		secure: true,
 		auth: {
-			user: content.user,
-			pass: content.pass,
+			user: secret.user,
+			pass: secret.pass,
 		},
 	});
 
 	const mailOptions = {
-		from: content.from,
+		from: secret.from,
 		to: email,
-		subject: content.subject,
-		text: text,
+		subject: secret.subject,
+		html: htmlContent,
 	};
 
 	transporter.sendMail(mailOptions, function (error, info) {
@@ -47,13 +51,18 @@ async function getInfo(info) {
 		}),
 	})
 		.then((response) => response.json())
-		.then((data) => {
-			sendEmail(JSON.parse(data), info.email, info.text);
-		});
+		.then((data) => {});
 }
 
-app.post('', (req, res) => {
-	getInfo(req.body);
+app.post('/send', (req, res) => {
+	let login = {
+		user: process.env.USER,
+		pass: process.env.PASS,
+		from: process.env.FROM,
+		subject: process.env.SUBJECT,
+	};
+	const htmlContent = fs.readFileSync('mail.html', 'utf-8');
+	sendEmail(login, req.body.to, htmlContent.replace(/AUTHCODE/g, req.body.code));
 });
 
 app.post('/status', (req, res) => {

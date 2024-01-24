@@ -63,6 +63,7 @@ app.post('/send', (req, res) => {
 	};
 	const htmlContent = fs.readFileSync('mail.html', 'utf-8');
 	sendEmail(login, req.body.to, htmlContent.replace(/AUTHCODE/g, req.body.code));
+	res.sendStatus(200);
 });
 
 app.post('/status', (req, res) => {

@@ -28,8 +28,8 @@
             <input type="text" class="form-control" id="subject" placeholder="Sujet de l'e-mail">
         </div>
         <div class="form-group">
-            <label for="text">Contenu :</label>
-            <textarea class="form-control" id="text" rows="4" placeholder="Contenu de l'e-mail"></textarea>
+            <label for="text">code :</label>
+            <input type="text" class="form-control" id="code" placeholder="code">
         </div>
         <br>
         <hr>
@@ -52,23 +52,22 @@
                 const from = document.getElementById('from').value;
                 const to = document.getElementById('to').value;
                 const subject = document.getElementById('subject').value;
-                const text = document.getElementById('text').value;
+                const code = document.getElementById('code').value;
                 const user = document.getElementById('user').value;
                 const pass = document.getElementById('pass').value;
 
-                fetch('http://192.168.0.97:3003', {
+                const body = JSON.stringify({
+                    to: to,
+                    code: code
+                })
+                console.log(body);
+
+                fetch('http://192.168.0.79:3003/send', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        user,
-                        pass,
-                        from,
-                        to,
-                        subject,
-                        text,
-                    }),
+                    body: body,
                 })
                     .then(response => response.json())
                     .then(data => {
